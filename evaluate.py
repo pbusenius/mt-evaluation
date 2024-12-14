@@ -7,6 +7,7 @@ parser.add_argument("-t", "--translation", type=str, help="")
 parser.add_argument("-r", "--reference", type=str, help="")
 args = parser.parse_args()
 
+
 def main():
     pass
 
