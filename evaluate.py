@@ -5,7 +5,11 @@ import polars as pl
 
 from utils import dataset
 from typing import Dict, List
-from candidates.nllb import batch
+from candidates import nllb
+from candidates import argotrans
+from candidates import m2m100
+from candidates import mbart
+from candidates import opus
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--source", type=str, help="")
@@ -33,15 +37,16 @@ def load_source_language_data(language_codes: List[str]) -> pl.DataFrame:
 
 
 def main():
-    # batch.nllb_batch_handler(["ace"], "deu")
-
     config = load_settings_json("settings.json")
 
     src_language_df = load_source_language_data(config["source_languages"])
     dst_language_df = dataset.load_language(config["destination_language"])
 
-    print(src_language_df)
-    print(dst_language_df)
+    argotrans.batch_handler(src_language_df, config["destination_language"])
+    m2m100.batch_handler(src_language_df, config["destination_language"])
+    mbart.batch_handler(src_language_df, config["destination_language"])
+    nllb.batch_handler(src_language_df, config["destination_language"])
+    opus.batch_handler(src_language_df, config["destination_language"])
 
 
 if __name__ == "__main__":
