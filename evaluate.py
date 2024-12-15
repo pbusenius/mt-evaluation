@@ -1,8 +1,10 @@
 import os
 import json
 import argparse
+import polars as pl
 
-from typing import Dict
+from utils import dataset
+from typing import Dict, List
 from candidates.nllb import batch
 
 parser = argparse.ArgumentParser()
@@ -21,12 +23,25 @@ def load_settings_json(file: str) -> Dict:
     return config
 
 
+def load_source_language_data(language_codes: List[str]) -> pl.DataFrame:
+    src_dataframes = []
+    for src_language in language_codes:
+        tmp_df = dataset.load_language(src_language)
+        src_dataframes.append(tmp_df)
+    
+    return pl.concat(src_dataframes)
+
+
 def main():
     # batch.nllb_batch_handler(["ace"], "deu")
 
     config = load_settings_json("settings.json")
 
-    print(config)
+    src_language_df = load_source_language_data(config["source_languages"])
+    dst_language_df = dataset.load_language(config["destination_language"])
+
+    print(src_language_df)
+    print(dst_language_df)
 
 
 if __name__ == "__main__":
