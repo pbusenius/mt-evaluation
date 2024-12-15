@@ -28,7 +28,7 @@ def load_source_language_data(language_codes: List[str]) -> pl.DataFrame:
     for src_language in language_codes:
         tmp_df = dataset.load_language(src_language)
         src_dataframes.append(tmp_df)
-    
+
     return pl.concat(src_dataframes)
 
 
