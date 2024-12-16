@@ -10,6 +10,7 @@ def load_data(split: str):
     df = df.drop("id")
 
     for iso_code, language_df in df.group_by("iso_639_3"):
+        language_df = language_df.rename(mapping={"text": "src"})
         language_df.write_parquet(
             os.path.join(DATA_DIR, f"{iso_code[0]}_{split}.parquet")
         )
