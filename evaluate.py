@@ -11,6 +11,8 @@ from candidates import m2m100
 from candidates import mbart
 from candidates import opus
 
+from evaluation.xcomet import handler
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--source", type=str, help="")
 parser.add_argument("-r", "--reference", type=str, help="")
@@ -42,11 +44,13 @@ def main():
     src_language_df = load_source_language_data(config["source_languages"])
     dst_language_df = dataset.load_language(config["destination_language"])
 
-    argotrans.batch_handler(src_language_df, config["destination_language"])
-    m2m100.batch_handler(src_language_df, config["destination_language"])
-    mbart.batch_handler(src_language_df, config["destination_language"])
-    nllb.batch_handler(src_language_df, config["destination_language"])
-    opus.batch_handler(src_language_df, config["destination_language"])
+    # argotrans.batch_handler(src_language_df, config["destination_language"])
+    # m2m100.batch_handler(src_language_df, config["destination_language"])
+    # mbart.batch_handler(src_language_df, config["destination_language"])
+    # nllb.batch_handler(src_language_df, config["destination_language"])
+    test_df = opus.batch_handler(src_language_df, config["destination_language"])
+
+    print(handler.evaluate(test_df))
 
 
 if __name__ == "__main__":
